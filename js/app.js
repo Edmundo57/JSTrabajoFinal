@@ -311,8 +311,8 @@ const btnConsulta = document.querySelector('#btnConsulta');
 const btnIngreso = document.querySelector('#btnIngreso');
 const btnRetiro = document.querySelector('#btnRetiro');
 
-if (nombrePagina === 'operaciones') {
-    // Eventos
+
+if (!!btnCerrarSesion) {
     btnCerrarSesion.addEventListener('click', () => {
 
         // console.log('hola');
@@ -321,6 +321,20 @@ if (nombrePagina === 'operaciones') {
         document.location.href = '../index.html';
 
     });
+}
+
+
+
+if (nombrePagina === 'operaciones') {
+    // Eventos
+    // // btnCerrarSesion.addEventListener('click', () => {
+
+    // //     // console.log('hola');
+    // //     localStorage.removeItem('CuentaActiva');
+    // //     localStorage.removeItem('Validado');
+    // //     document.location.href = '../index.html';
+
+    // // });
 
 
     btnConsulta.addEventListener('click', () => {
