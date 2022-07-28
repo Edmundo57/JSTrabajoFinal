@@ -14,6 +14,10 @@
     height: 50px;
 }
 
+.noMostrar {
+    display: none;
+}
+
 
 /* LOGIN PAGE END*/
 

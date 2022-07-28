@@ -17,6 +17,23 @@ let cuentaSeleccionada = '';
 let nombrePagina = getNameURLWeb();
 nombrePagina = nombrePagina.split('.')[0];
 
+
+
+
+//ELEMENTOS
+const concapturaDato = document.querySelector('#capturaDato');
+const consaldoActual = document.querySelector('#saldoActual');
+
+const btnNoMostrarSaldo = document.querySelector('#btnNoMostrarSaldo');
+
+const h1UserSaldo = document.querySelector('#UserSaldo');
+const h1SaldoAnterior = document.querySelector('#SaldoAnterior');
+const h1Movto = document.querySelector('#Movto');
+const h1Saldo = document.querySelector('#Saldo');
+
+
+
+
 window.onload = () => {
     // console.log(cuentas);
     // console.log(nombrePagina);
@@ -46,19 +63,21 @@ window.onload = () => {
             existeCuentaActiva() == "false" ? document.location.href = '../index.html' : loadConsulta();
             break;
 
+        case 'retiro':
+            existeCuentaActiva() == "false" ? document.location.href = '../index.html' : loadRetiro();
+            break;
+
+        case 'ingreso':
+            existeCuentaActiva() == "false" ? document.location.href = '../index.html' : loadIngreso();
+            break;
+
         default:
             break;
     }
 }
 
-
-const existeCuentaActiva = () => {
-
-    let cuentaActiva = localStorage.getItem("Validado");
-    // console.log(cuentaActiva);
-
-    return cuentaActiva;
-}
+// VALIDA SI LA CUENTA YA ESTA FIRMADA
+const existeCuentaActiva = () => localStorage.getItem("Validado");
 
 
 
@@ -159,6 +178,7 @@ function tecladoCalculadora(tecla = '', tipo = 'login') {
 
     switch (tecla) {
         case 'E':
+
             if (tipo == 'login') {
 
                 respuesta = validaPass(inputPass.textContent);
@@ -168,6 +188,10 @@ function tecladoCalculadora(tecla = '', tipo = 'login') {
                 if (respuesta.ok) {
                     localStorage.setItem("Validado", true);
                     document.location.href = './operaciones.html';
+                    inputImporte.value = "";
+                    inputImporte.textContent = "";
+                } else {
+                    mostrarMensaje(respuesta.mensaje);
                 }
 
             } else {
@@ -178,22 +202,51 @@ function tecladoCalculadora(tecla = '', tipo = 'login') {
                 if (respuesta.ok) {
                     if (tipo == 'ingreso') {
 
+                        h1UserSaldo.innerHTML = `Saldo de ${ cuentaActiva.nombre }`
+                        h1SaldoAnterior.innerHTML = `Saldo Anterior: ${ cuentaActiva.saldo }`
+                        h1Movto.innerHTML = `Ingreso       : ${ Number(inputImporte.textContent) }`
                         cuentaActiva.saldo += Number(inputImporte.textContent)
+                        h1Saldo.innerHTML = `Saldo Actual  : ${ cuentaActiva.saldo }`
+
 
                     } else {
+                        h1UserSaldo.innerHTML = `Saldo de ${ cuentaActiva.nombre }`
+                        h1SaldoAnterior.innerHTML = `Saldo Anterior: ${ cuentaActiva.saldo }`
+                        h1Movto.innerHTML = `Retiro        : ${ Number(inputImporte.textContent) }`
                         cuentaActiva.saldo -= Number(inputImporte.textContent)
+                        h1Saldo.innerHTML = `Saldo Actual  : ${ cuentaActiva.saldo }`
                     }
 
+                    inputImporte.value = "";
+                    inputImporte.textContent = "";
+
                     localStorage.setItem("CuentaActiva", JSON.stringify(cuentaActiva));
+
+                    //MUESTRA LA OTRA INFO DE SALDOS
+                    concapturaDato.classList.add("noMostrar");
+                    consaldoActual.classList.remove("noMostrar");
+
+
+                } else {
+                    mostrarMensaje(respuesta.mensaje);
                 }
 
             }
             return;
         case 'B':
-            if (inputPass.textContent.length > 0) {
-                inputPass.textContent = inputPass.textContent.substring(0, inputPass.textContent.length - 1)
-                inputPass.value = inputPass.textContent;
-                // console.log(inputPass.textContent);
+            if (tipo == 'login') {
+
+                if (inputPass.textContent.length > 0) {
+                    inputPass.textContent = inputPass.textContent.substring(0, inputPass.textContent.length - 1)
+                    inputPass.value = inputPass.textContent;
+                    // console.log(inputPass.textContent);
+                }
+            } else {
+                if (inputImporte.textContent.length > 0) {
+                    inputImporte.textContent = inputImporte.textContent.substring(0, inputImporte.textContent.length - 1)
+                    inputImporte.value = inputImporte.textContent;
+                    // console.log(inputPass.textContent);
+                }
             }
             return;
 
@@ -213,8 +266,12 @@ function tecladoCalculadora(tecla = '', tipo = 'login') {
 }
 
 const validaPass = (pass = "") => {
-    // console.log(pass.length);
+
     if (pass.length < 4) return { ok: false, mensaje: 'La contraseña debe de ser de 4 digitos' }
+
+    let cuentaActiva = JSON.parse(localStorage.getItem("CuentaActiva"));
+
+    if (pass != cuentaActiva.password) return { ok: false, mensaje: 'la contraseña es incorrecta verifique' }
 
     return { ok: true, mensaje: '' }
 }
@@ -224,7 +281,7 @@ const validaImporte = (importe = 0, tipo = 'retiro', saldo = 0) => {
 
     if (tipo == 'ingreso') {
         if ((importe + saldo) > 990) {
-            return { ok: false, mensaje: 'No es posible tener un saldo meyor a 990' }
+            return { ok: false, mensaje: 'No es posible tener un saldo mayor a 990' }
         }
     } else {
         if ((saldo - importe) < 10) {
@@ -234,6 +291,12 @@ const validaImporte = (importe = 0, tipo = 'retiro', saldo = 0) => {
 
 
     return { ok: true, mensaje: 'Todo correcto' }
+}
+
+
+const mostrarMensaje = (mensaje = "") => {
+    //alert(mensaje);
+    swal("Error", mensaje, "error");
 }
 
 // E V E N T O S
@@ -264,43 +327,11 @@ if (!!btn1) btnE.addEventListener('click', function(e) { tecladoCalculadora(e.ta
 const h1UserLogin = document.querySelector('#userLogin');
 
 
-//console.log('hola 33');
-// console.log(!!btn1);
-// console.log(btn1);
-
 const loadLogin = () => {
     let cuentaActiva = JSON.parse(localStorage.getItem("CuentaActiva"));
     h1UserLogin.innerHTML = `Bienvenid@ ${ cuentaActiva.nombre }`;
     // console.log('si funciona');
 }
-
-
-
-
-
-// if (nombrePagina === 'login') {
-//     // Eventos
-//     btn1.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn2.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn3.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn4.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn5.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn6.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn7.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn8.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn9.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btn0.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btnB.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-//     btnE.addEventListener('click', function(e) { tecladoCalculadora(e.target.id) });
-// }
-
-
-// *****************************
-// LOGIN PAGE - FINISH
-// *****************************
-
-
-
 
 // *****************************
 // OPERACIONES PAGE - START
@@ -310,7 +341,6 @@ const h1User = document.querySelector('#User');
 const btnConsulta = document.querySelector('#btnConsulta');
 const btnIngreso = document.querySelector('#btnIngreso');
 const btnRetiro = document.querySelector('#btnRetiro');
-
 
 if (!!btnCerrarSesion) {
     btnCerrarSesion.addEventListener('click', () => {
@@ -323,20 +353,8 @@ if (!!btnCerrarSesion) {
     });
 }
 
-
-
 if (nombrePagina === 'operaciones') {
     // Eventos
-    // // btnCerrarSesion.addEventListener('click', () => {
-
-    // //     // console.log('hola');
-    // //     localStorage.removeItem('CuentaActiva');
-    // //     localStorage.removeItem('Validado');
-    // //     document.location.href = '../index.html';
-
-    // // });
-
-
     btnConsulta.addEventListener('click', () => {
         document.location.href = './consulta.html';
     });
@@ -350,19 +368,12 @@ if (nombrePagina === 'operaciones') {
     });
 }
 
-
 const loadOperaciones = () => {
 
     let cuentaActiva = JSON.parse(localStorage.getItem("CuentaActiva"));
     h1User.innerHTML = `Bienvenid@ ${ cuentaActiva.nombre }`;
 
 }
-
-
-// *****************************
-// OPERACIONES PAGE - FINISH
-// *****************************
-
 
 // *****************************
 // CONSULTA PAGE - START
@@ -387,30 +398,32 @@ const loadConsulta = () => {
 }
 
 
-
-// *****************************
-// CONSULTA PAGE - FINISH
-// *****************************
-
-
 // *****************************
 // INGRESO PAGE - START
 // *****************************
 
 
+if (!!btnNoMostrarSaldo) {
+    btnNoMostrarSaldo.addEventListener('click', () => {
+        concapturaDato.classList.remove("noMostrar");
+        consaldoActual.classList.add("noMostrar");
+    });
+}
 
-// *****************************
-// INGRESO PAGE - FINISH
-// *****************************
 
+const loadIngreso = () => {
 
+    let cuentaActiva = JSON.parse(localStorage.getItem("CuentaActiva"));
+    h1User.innerHTML = `Bienvenid@ ${ cuentaActiva.nombre }`;
+}
 
 // *****************************
 // RETIRO PAGE - START
 // *****************************
 
+const loadRetiro = () => {
 
+    let cuentaActiva = JSON.parse(localStorage.getItem("CuentaActiva"));
+    h1User.innerHTML = `Bienvenid@ ${ cuentaActiva.nombre }`;
 
-// *****************************
-// RETIRO PAGE - FINISH
-// *****************************
+}

@@ -21,11 +21,15 @@
             <span class="text-center me-2 text-capitalize eslogan">Banamex el banco de mexico</span
         >
       </div>
+      <div class="sesion w-100 text-end me-2">
+        <span id="btnCerrarSesion" class="btn btn-danger">
+      Cerrar Sesion
+    </span>
     </nav>
-    <div class="container">
-      <div class="row text-center">
-        <h1 id="user"></h1>
-        <span class="text-center">Capture capture el importe a retirar</span>
+    <div class="container" id="capturaDato">
+        <div class="row text-center">
+            <h1 id="User"></h1>
+            <span class="text-center alert alert-dark text-primary"><strong>Capture el importe a retirar</strong></span>
         </div>
 
         <div class="row">
@@ -101,9 +105,44 @@
   Regresar a operaciones
 </span>
         </div>
+    </div>
+
+    <div class="container noMostrar" id="saldoActual">
+        <div class="row text-center">
+            <h1 id="UserSaldo">
+                Jesus
+            </h1>
+        </div>
+
+        <div class="row text-center">
+            <h1 id="SaldoAnterior">
+                Saldo Anterior
+            </h1>
+        </div>
+
+        <div class="row text-center">
+            <h1 id="Movto">
+                Ingreso: Retiro:
+            </h1>
+        </div>
+
+        <div class="row text-center">
+            <h1 id="Saldo">
+                Saldo Actual
+            </h1>
+        </div>
 
 
-        <script type="module" src="../js/app.js"></script>
+
+        <div class="col text-center">
+            <span id="btnNoMostrarSaldo" class="btn btn-warning btnOperaciones">
+          Regresar
+        </span>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script type="module" src="../js/app.js"></script>
 </body>
 
 </html>

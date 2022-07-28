@@ -21,11 +21,15 @@
             <span class="text-center me-2 text-capitalize eslogan">Banamex el banco de mexico</span
         >
       </div>
+      <div class="sesion w-100 text-end me-2">
+        <span id="btnCerrarSesion" class="btn btn-danger">
+      Cerrar Sesion
+    </span>
     </nav>
-    <div class="container">
-      <div class="row text-center">
-        <h1 id="user"></h1>
-        <span class="text-center">Capture el importe a ingresar</span>
+    <div class="container" id="capturaDato">
+        <div class="row text-center">
+            <h1 id="User"></h1>
+            <span class="text-center alert alert-dark text-primary"><strong>Capture el importe a ingresar</strong></span>
         </div>
 
         <div class="row">
@@ -33,6 +37,16 @@
                 <input type="number" class="importe" id="importe" />
             </div>
         </div>
+
+        <!-- <div class="row">
+            <div class="col-me-12">
+                <div class="alert alert-danger">
+                    hola
+                </div>
+
+            </div>
+        </div> -->
+
         <div class="row">
             <div class="col-4">
                 <button class="btnCalculadora btn 
@@ -102,7 +116,48 @@
 </span>
         </div>
 
+        <!-- <div class="col text-center">
+            <span id="btnMostrarSaldo" class="btn btn-warning btnOperaciones">
+  Mostar Saldo
+</span>
+        </div> -->
 
+
+
+    </div>
+    <div class="container noMostrar" id="saldoActual">
+        <div class="row text-center alert alert-success">
+            <h1 id="UserSaldo">
+                Jesus
+            </h1>
+        </div>
+
+        <div class="row text-center">
+            <h1 id="SaldoAnterior">
+                Saldo Anterior
+            </h1>
+        </div>
+
+        <div class="row text-center">
+            <h1 id="Movto">
+                Ingreso: Retiro:
+            </h1>
+        </div>
+
+        <div class="row text-center">
+            <h1 id="Saldo">
+                Saldo Actual
+            </h1>
+        </div>
+
+
+
+        <div class="col text-center">
+            <span id="btnNoMostrarSaldo" class="btn btn-warning btnOperaciones">
+      Regresar
+    </span>
+        </div>
+        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
         <script type="module" src="../js/app.js"></script>
 </body>
 
