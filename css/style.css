@@ -1,0 +1,42 @@
+/* LOGIN PAGE START*/
+
+.password {
+    width: 100%;
+    font-weight: bolder;
+    font-size: 50px;
+    text-align: center;
+    letter-spacing: 50px;
+}
+
+.btnCalculadora {
+    width: 100%;
+    font-weight: bolder;
+    height: 50px;
+}
+
+
+/* LOGIN PAGE END*/
+
+
+/* OPERACIONES PAGE */
+
+.eslogan {
+    color: black;
+    font-size: 19px;
+}
+
+.btnOperaciones {
+    margin: 10px;
+    width: 80%;
+}
+
+
+/* OPERACIONES PAGE END*/
+
+.importe {
+    width: 100%;
+    font-weight: bolder;
+    font-size: 50px;
+    text-align: center;
+    /* letter-spacing: 50px; */
+}
